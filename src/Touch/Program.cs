@@ -20,24 +20,19 @@ namespace Touch
 
         static void TheMain(string[] args)
         {
-            var baseFolder = null != args && args.Length > 0 ? args[0] : null;
-            if (null == baseFolder)
+            var target = null != args && args.Length > 0 ? args[0] : null;
+            if (null == target)
             {
-                Console.WriteLine("Specify the baseFolder as first argument.");
+                Console.WriteLine("Specify target file or folder as first argument.");
                 return;
             }
 
-            var isFile = File.Exists(baseFolder);
-            if (isFile)
-            {
-                Console.WriteLine("First argument should specify a directoty, not a file. Try again.");
-                return;
-            }
+            var isFile = File.Exists(target);
+            var isDir = Directory.Exists(target);
 
-            var exists = Directory.Exists(baseFolder);
-            if (!exists)
+            if (!isFile && !isDir)
             {
-                Console.WriteLine($"Directory not found: {baseFolder}");
+                Console.WriteLine($"File or Directory not found: {target}");
                 return;
             }
 
@@ -48,7 +43,7 @@ namespace Touch
                 var good = DateTime.TryParse(args[1], out timeStamp);
                 if (!good)
                 {
-                    Console.WriteLine($"Suggested time stamp '{args[1]}' is invalid. Check secone argumnt.");
+                    Console.WriteLine($"Suggested time stamp '{args[1]}' is invalid.");
                     return;
                 }
             }
@@ -68,34 +63,48 @@ namespace Touch
                 return;
             }
 
-            Console.WriteLine($"Target folder: {baseFolder}");
-            Console.WriteLine($"Timestamp    : {timeStamp}");
-            Console.WriteLine($"Will touch   : {flags}");
+            Console.WriteLine($"Target     : {target}");
+            Console.WriteLine($"Timestamp  : {timeStamp}");
+            Console.WriteLine($"Will touch : {flags}");
 
             Console.WriteLine();
             Console.WriteLine("Press ENTER to touch or Ctrl-C to stop.");
             Console.ReadLine();
 
-            var baseDir = new DirectoryInfo(baseFolder);
             var dirCount = 0;
             var fileCount = 0;
 
-            foreach(var dir in baseDir.GetDirectories("*", SearchOption.AllDirectories))
+            if (isFile)
             {
-                if (touchCreationTime) dir.CreationTime = timeStamp;
-                if (touchLastWriteTime) dir.LastWriteTime = timeStamp;
-                if (touchLastAccessTime) dir.LastAccessTime = timeStamp;
-                
-                dirCount += 1;
-            }
+                var file = new FileInfo(target);
 
-            foreach(var file in baseDir.GetFiles("*", SearchOption.AllDirectories))
-            {
                 if (touchCreationTime) file.CreationTime = timeStamp;
                 if (touchLastWriteTime) file.LastWriteTime = timeStamp;
                 if (touchLastAccessTime) file.LastAccessTime = timeStamp;
 
                 fileCount += 1;
+            }
+            else
+            {
+                var baseDir = new DirectoryInfo(target);
+
+                foreach (var dir in baseDir.GetDirectories("*", SearchOption.AllDirectories))
+                {
+                    if (touchCreationTime) dir.CreationTime = timeStamp;
+                    if (touchLastWriteTime) dir.LastWriteTime = timeStamp;
+                    if (touchLastAccessTime) dir.LastAccessTime = timeStamp;
+
+                    dirCount += 1;
+                }
+
+                foreach (var file in baseDir.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    if (touchCreationTime) file.CreationTime = timeStamp;
+                    if (touchLastWriteTime) file.LastWriteTime = timeStamp;
+                    if (touchLastAccessTime) file.LastAccessTime = timeStamp;
+
+                    fileCount += 1;
+                }
             }
 
             Console.WriteLine($"Touched {dirCount:#,0} folders and {fileCount:#,0} files.");
