@@ -117,7 +117,7 @@ namespace Touch
         {
             Console.WriteLine();
             Console.WriteLine(DOTS);
-            Console.WriteLine("Usage: Touch.exe <directory> [timeStamp] [CMA]");
+            Console.WriteLine("Usage: Touch.exe <File|Directory> [timeStamp] [CMA]");
             Console.WriteLine("Flags: [C]reateTime, [M]odifiedTime, [A]ccessTime");
 
             Console.WriteLine(DOTS);
