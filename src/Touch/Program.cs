@@ -43,7 +43,7 @@ namespace Touch
                 var good = DateTime.TryParse(args[1], out timeStamp);
                 if (!good)
                 {
-                    Console.WriteLine($"Suggested time stamp '{args[1]}' is invalid.");
+                    Console.WriteLine($"Suggested timestamp '{args[1]}' is invalid.");
                     return;
                 }
             }
@@ -59,7 +59,7 @@ namespace Touch
             flags += touchLastAccessTime ? "Last[A]ccessTime " : string.Empty;
             if (string.IsNullOrEmpty(flags))
             {
-                Console.WriteLine($"Invalid specs. Expecting [C]reationTime, [M]odifiedTime, [A]ccessTime. Examples: 'M', 'CM', 'CMA");
+                Console.WriteLine($"Invalid flags. Expecting [C]reationTime, [M]odifiedTime, [A]ccessTime. Examples: 'M', 'CM', 'CMA");
                 return;
             }
 
