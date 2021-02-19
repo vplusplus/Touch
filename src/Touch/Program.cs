@@ -88,7 +88,7 @@ namespace Touch
             {
                 var baseDir = new DirectoryInfo(target);
 
-                foreach (var dir in baseDir.GetDirectories("*", SearchOption.AllDirectories))
+                foreach (var dir in baseDir.EnumerateDirectories("*", SearchOption.AllDirectories))
                 {
                     if (touchCreationTime) dir.CreationTime = timeStamp;
                     if (touchLastWriteTime) dir.LastWriteTime = timeStamp;
@@ -97,7 +97,7 @@ namespace Touch
                     dirCount += 1;
                 }
 
-                foreach (var file in baseDir.GetFiles("*", SearchOption.AllDirectories))
+                foreach (var file in baseDir.EnumerateFiles("*", SearchOption.AllDirectories))
                 {
                     if (touchCreationTime) file.CreationTime = timeStamp;
                     if (touchLastWriteTime) file.LastWriteTime = timeStamp;
